@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './css/styles.css'; // Import your CSS file
+import './css/styles.css';
+import './css/themes.css';
 import SearchBar from './components/SearchBar';
 import MovieList from './components/MovieList';
 import MovieDetail from './components/MovieDetail';
@@ -10,6 +11,17 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Toggle dark/light mode
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+    if (!isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  };
 
   // Function to handle the search functionality
   const handleSearch = async (query) => {
@@ -27,7 +39,13 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <h1>Movie Search App</h1>
+        <header>
+          <h1>Movie Search App</h1>
+          <button onClick={toggleTheme}>
+            {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          </button>
+        </header>
+
         <Routes>
           {/* Home Route */}
           <Route
