@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './css/styles.css';
+import './css/styles.css'; 
 import './css/themes.css';
 import SearchBar from './components/SearchBar';
 import MovieList from './components/MovieList';
@@ -13,17 +13,27 @@ const App = () => {
   const [error, setError] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Toggle dark/light mode
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    if (!isDarkMode) {
+  useEffect(() => {
+    // Check if the theme preference is already saved in localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      setIsDarkMode(true);
       document.body.classList.add('dark-mode');
+    }
+  }, []);
+
+  const handleThemeChange = (event) => {
+    const theme = event.target.value;
+    setIsDarkMode(theme === 'dark');
+    if (theme === 'dark') {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark'); // Save preference
     } else {
       document.body.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light'); // Save preference
     }
   };
 
-  // Function to handle the search functionality
   const handleSearch = async (query) => {
     setLoading(true);
     setError(null);
@@ -41,13 +51,17 @@ const App = () => {
       <div className="App">
         <header>
           <h1>Movie Search App</h1>
-          <button onClick={toggleTheme}>
-            {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          </button>
+          {/* Dropdown for theme selection */}
+          <div className="theme-dropdown">
+            <label htmlFor="theme-select">Select Theme: </label>
+            <select id="theme-select" onChange={handleThemeChange} value={isDarkMode ? 'dark' : 'light'}>
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+            </select>
+          </div>
         </header>
 
         <Routes>
-          {/* Home Route */}
           <Route
             path="/"
             element={
@@ -59,8 +73,6 @@ const App = () => {
               </>
             }
           />
-
-          {/* Movie Detail Route */}
           <Route path="/movie/:id" element={<MovieDetail />} />
         </Routes>
       </div>

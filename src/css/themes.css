@@ -42,5 +42,29 @@
     background-color: var(--header-background);
     padding: 10px;
     text-align: center;
+    position: relative;
+  }
+  
+  .theme-dropdown {
+    position: fixed; /* Change from absolute to fixed */
+    bottom: 10px; /* Position at the bottom of the page */
+    right: 10px;  /* Position it on the right */
+    z-index: 100; /* Ensure it's above other content */
+  }
+  
+  .theme-dropdown select {
+    padding: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .theme-dropdown label {
+    font-size: 16px;
+    margin-right: 10px;
+  }
+  
+  /* Add some padding for the page content */
+  .App {
+    padding: 20px;
   }
   
